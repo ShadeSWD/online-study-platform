@@ -4,26 +4,10 @@ from users.models import User
 NULLABLE = {'null': True, 'blank': True}
 
 
-class Course(models.Model):
-    created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
-    changed_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
-    title = models.CharField(max_length=50, verbose_name='название')
-    preview = models.ImageField(upload_to='course_images', verbose_name='превью', **NULLABLE)
-    description = models.TextField(verbose_name='описание')
-
-    def __str__(self):
-        return f'{self.title}'
-
-    class Meta:
-        verbose_name = 'курс'
-        verbose_name_plural = 'курсы'
-
-
 class Lesson(models.Model):
     created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
     changed_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
     title = models.CharField(max_length=50, verbose_name='название')
-    course = models.ForeignKey(to=Course, on_delete=models.CASCADE, verbose_name='курс')
     preview = models.ImageField(upload_to='lesson_images', verbose_name='превью', **NULLABLE)
     description = models.TextField(verbose_name='описание')
     video_url = models.URLField(verbose_name='ссылка на видео', **NULLABLE)
@@ -34,6 +18,22 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = 'урок'
         verbose_name_plural = 'уроки'
+
+
+class Course(models.Model):
+    created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
+    changed_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
+    title = models.CharField(max_length=50, verbose_name='название')
+    preview = models.ImageField(upload_to='course_images', verbose_name='превью', **NULLABLE)
+    description = models.TextField(verbose_name='описание')
+    lessons = models.ManyToManyField(Lesson, **NULLABLE, verbose_name='уроки')
+
+    def __str__(self):
+        return f'{self.title}'
+
+    class Meta:
+        verbose_name = 'курс'
+        verbose_name_plural = 'курсы'
 
 
 class Payment(models.Model):
