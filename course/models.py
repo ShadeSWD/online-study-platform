@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import User
+from config import settings
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -7,6 +8,7 @@ NULLABLE = {'null': True, 'blank': True}
 class Lesson(models.Model):
     created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
     changed_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
     title = models.CharField(max_length=50, verbose_name='название')
     preview = models.ImageField(upload_to='lesson_images', verbose_name='превью', **NULLABLE)
     description = models.TextField(verbose_name='описание')
@@ -23,6 +25,7 @@ class Lesson(models.Model):
 class Course(models.Model):
     created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
     changed_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE)
     title = models.CharField(max_length=50, verbose_name='название')
     preview = models.ImageField(upload_to='course_images', verbose_name='превью', **NULLABLE)
     description = models.TextField(verbose_name='описание')
