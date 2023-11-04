@@ -34,6 +34,14 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['course', 'payment_method']
 
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    ordering_fields = ['created_at', ]
+    filterset_fields = ['course', 'payment_method']
+
+
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
     permission_classes = [IsNotStaff]
