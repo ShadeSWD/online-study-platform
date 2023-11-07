@@ -3,6 +3,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from course.permissions import IsOwner, IsStaff, IsNotStaff, IsOwnerOrStaff
 from course.models import Course, Lesson, Payment, Subscription
 from course.serializers import CourseSerializer, LessonSerializer, PaymentSerializer, SubscriptionSerializer
+from course.paginators import CoursePaginator
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
@@ -29,6 +30,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = CoursePaginator
 
     def perform_create(self, serializer):
         super().perform_create(serializer)
@@ -69,6 +71,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = CoursePaginator
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
