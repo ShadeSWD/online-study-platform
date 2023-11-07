@@ -1,8 +1,29 @@
 from rest_framework import viewsets, generics, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from course.permissions import IsOwner, IsStaff, IsNotStaff, IsOwnerOrStaff
-from course.models import Course, Lesson, Payment
-from course.serializers import CourseSerializer, LessonSerializer, PaymentSerializer
+from course.models import Course, Lesson, Payment, Subscription
+from course.serializers import CourseSerializer, LessonSerializer, PaymentSerializer, SubscriptionSerializer
+
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        new_subscription = serializer.save()
+        new_subscription.owner = self.request.user
+        new_subscription.save()
+
+    def get_permissions(self):
+        permission_classes = []
+        if self.action in ['create', ]:
+            permission_classes = [IsNotStaff]
+        if self.action in ['retrieve', 'update', 'partial_update']:
+            permission_classes = [IsOwnerOrStaff]
+        if self.action in ['destroy', ]:
+            permission_classes = [IsOwner]
+        return [permission() for permission in permission_classes]
 
 
 class CourseViewSet(viewsets.ModelViewSet):

@@ -45,7 +45,7 @@ class Payment(models.Model):
     PAYMENT_METHODS = ((0, 'наличные'), (1, 'перевод'))
 
     created_at = models.DateTimeField(verbose_name='creation date', auto_now_add=True)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='пользователь')
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='пользователь')
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE, verbose_name='курс')
     amount = models.DecimalField(verbose_name='сумма оплаты', max_digits=19, decimal_places=10)
     payment_method = models.IntegerField(verbose_name='способ оплаты', choices=PAYMENT_METHODS)
@@ -53,3 +53,19 @@ class Payment(models.Model):
     class Meta:
         verbose_name = 'платёж'
         verbose_name_plural = 'платежи'
+
+
+class Subscription(models.Model):
+    CASH = 0
+    MONEY_TRANSFER = 1
+    PAYMENT_METHODS = ((0, 'наличные'), (1, 'перевод'))
+
+    created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
+    changed_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
+    owner = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='пользователь', **NULLABLE)
+    course = models.ForeignKey(to=Course, on_delete=models.CASCADE, verbose_name='курс')
+    is_active = models.BooleanField(verbose_name='активна')
+
+    class Meta:
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'
