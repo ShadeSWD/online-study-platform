@@ -35,7 +35,10 @@ class CourseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         new_course = serializer.save()
-        new_course.owner = self.request.user
+        try:
+            new_course.owner = self.request.user
+        except ValueError:
+            pass
         new_course.save()
 
     def get_permissions(self):
@@ -64,7 +67,10 @@ class LessonCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         new_lesson = serializer.save()
-        new_lesson.owner = self.request.user
+        try:
+            new_lesson.owner = self.request.user
+        except ValueError:
+            pass
         new_lesson.save()
 
 
