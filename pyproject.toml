@@ -23,7 +23,6 @@ eventlet = "^0.33.3"
 django-celery-beat = "^2.5.0"
 redis = "^5.0.1"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
